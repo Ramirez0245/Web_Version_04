@@ -1,44 +1,143 @@
-<h1 class="text-center mb-3">{{title}}</h1>
+<h1 class="text-center mb-3">File application page</h1>
+<div class=" container">
+<a href="/" class="btn btn-light mt-4 ">Home</a>
+</div>
 
-<form action="/File" method="POST" class="mb-4">
-    <div class="form-group">
-        <label for="file_name">Name_ThisDisplayOnHtml</label>
-        <input type="text" name="file_name" class="form-control">
+<style>
+    .container {
+        border-color: black;
+    }
+</style>
+
+<div class="container"> 
+    <div>
+        <p class="mb-8">Hello, welcome to my file creation application. Here you can create a pseudo file and uploaded it online. 
+            The file in stored on mongoDB Atlas cloud database. On this web page application you can create, update/rename, 
+            read/search, and delete a file (CRUD). The web page application may also display all files stored on the database.
+            The server is running node js as its back-end language. The node js server application takes each request and follows on 
+            checking if the input is of valided type. After makes sure that input won't create a duplicate file i.e. no file may have 
+            the same name and with the same extention. Lastly after checking for valid input and for duplicates it will proceed to respond 
+            according to its request.
+        </p>
     </div>
-        <div class="form-group">
-        <label for="extention">Email</label>
-        <input type="text" name="extention" class="form-control">
+    <div> <h6>Note: 'Create a file' is the only one button that will render the whole page with a status responce. Others are AJAX calls rendered below here. </h6></div>
+
+    <div class="container">
+                <!-- /api/search GET  - all files START-->
+        <div class="form-group ">
+            <label for="file_get_all">Get all files </label>
+            <input id="btn_get_id" type="submit" value="Show all files" class="btn btn-primary btn-block">
+        </div> 
+        <!-- Files START-->
+        <div class="container" id="File_List_Insert"></div>
+        <!-- Files END-->
+        <div class="container">
+            <!-- /api/search GET  - all files END-->
+                <!-- STATUS -->
+            <h3 class="text-left mb-2" >RESPONCE STATUS:</h3> 
+            <div id="status_display" style="border: 1px solid black mb-4" >
+                
+            </div> <br> 
+            <!-- ERROR STATUS -->
+                <ul class="list-group">
+                {{#each comment}}
+                    <li class="list-group-item" id="error_comment">
+                        {{this.status}} 
+                    </li>
+                {{/each}}
+                </ul> 
+        </div>
     </div>
-    <input type="submit" value="Add Member" class="btn btn-primary btn-block">
-</form>
-    <div class="form-group">
-        <label for="file_name">Seach Name </label>
-        <input id="file_name_id" type="text" name="file_name" class="form-control" id="file_name_id">
-    </div>
-    <div class="form-group">
-        <label for="extention">Seach extention</label>
-        <input id="extention_id" type="text" name="extention" class="form-control" >
-    </div>
-    <input id="btn_id" type="submit" value="Search" class="btn btn-primary btn-block" >
-<ul class="list-group">
-    <div id="status_display">Status: 
-    
-    </div>
-    {{#each comment}}
-        <li class="list-group-item" >
-            {{this.status}}
-        </li>
-    {{/each}}
-</ul>
+
+    <div class="container">
+        <div class=" row">      
+            <div class="col">   <!-- POST FILE START -->
+                <form action="/File" method="POST" class="mb-4">
+                    <div class="form-group">
+                        <label for="file_name">Name</label>
+                        <input type="text" name="file_name" class="form-control">
+                    </div>
+                    <div class="w-100"></div>
+                    <div class="form-group">
+                        <label for="extention">Extention</label>
+                        <input type="text" name="extention" class="form-control">
+                    </div>
+                    <input type="submit" value="Create a file" class="btn btn-primary btn-block">
+                </form>
+            </div>              <!-- POST FILE END -->
+            <div class="col">   <!-- PATCH FILE START-->
+                <div class="form-group"> 
+                    <label for="file_name_patch">File to rename</label>
+                    <input id="file_name_patch_id" type="text" name="file_name_patch" class="form-control" id="file_name_id">
+                </div> 
+                <div class="form-group">
+                    <label for="extention_patch">Extention to rename</label>
+                    <input id="extention_patch_id" type="text" name="extention_patch" class="form-control" >
+                </div>
+                <div class="form-group">
+                    <label for="file_name_patch_to">New file name</label>
+                    <input id="file_name_patch_to_id" type="text" name="file_name_patch_to" class="form-control" id="file_name_id">
+                </div>
+                <div class="form-group">
+                    <label for="extention_patch_to">New extention name</label>
+                    <input id="extention_patch_to_id" type="text" name="extention_patch_to" class="form-control" >
+                </div>
+                <input id="btn_patch_id" type="submit" value="Patch" class="btn btn-primary btn-block" >       
+            </div>  <!-- PATCH FILE END-->
+            <div class="col"> <!-- /api/search  POST START -->       
+                <div class="form-group">
+                    <label for="file_name_search">Search name </label>
+                    <input id="file_name_search_id" type="text" name="file_name_search" class="form-control" id="file_name_id">
+                </div>
+                <div class="form-group">
+                    <label for="extention_search">Search extention name</label>
+                    <input id="extention_search_id" type="text" name="extention_search" class="form-control" >
+                </div>
+                <input id="btn_id" type="submit" value="Search for a file" class="btn btn-primary btn-block" >
+            </div>  <!-- /api/search  POST END -->
+            <div class="col">   <!-- DELETE FILE START  -->           
+                <div class="form-group">
+                    <label for="delete_file_name">File name</label>
+                    <input id="delete_input_file" type="text" name="delete_file_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="delete_file_extention">Extention name</label>
+                    <input id="delete_input_extention" type="text" name="delete_file_extention" class="form-control">
+                </div>
+                <input id="delete_btn"type="submit" value="Delete file" class="btn btn-primary btn-block mb-5">
+            </div>      <!-- DELETE FILE END  -->
+        </div>
+    </div> <br> <br> 
+
+</div>
+
+
+
+            <!-- Script section start -->
+        <!-- Variables and function declarations  -->
 <script>
-    let fileName = document.getElementById("file_name_id");
-    let extentionName = document.getElementById("extention_id");  
-    let btn = document.getElementById("btn_id");
+    let delete_file_name = document.getElementById("delete_input_file")
+    let delete_file_extention = document.getElementById("delete_input_extention")    
+    let fileNameSearch = document.getElementById("file_name_search_id");
+    let extentionNameSearch = document.getElementById("extention_search_id"); //////
+    let btn_delete = document.getElementById("delete_btn")
+    let btn_search = document.getElementById("btn_id");
+    let btn_get_all = document.getElementById("btn_get_id")
+    let file_List_Insert = document.getElementById("File_List_Insert");
+    let btn_patch_id = document.getElementById("btn_patch_id");
+    let filePatch =  document.getElementById("file_name_patch_id");
+    let extentionPatch =  document.getElementById("extention_patch_id");
+    let filePatchNew =  document.getElementById("file_name_patch_to_id");
+    let extentionPatchNew =  document.getElementById("extention_patch_to_id");
+    const apiSearch = "http://localhost:5000/api/search";
+    const PatchOrDelete = "http://localhost:5000/File"
     let displayStatus = 0;
+    let list_Display_Status = 0;
+    let deleteStatus = 0;
 
-    elementCheck_Status = () =>
+    elementCheck_Status = (elementId) =>
     {
-        if( displayStatus > 0) { removeElement('error') }
+        if( displayStatus > 0) { removeElement(elementId) }
         displayStatus = 1;
         return;
     }
@@ -54,62 +153,176 @@
     removeElement = (elementId) =>
     {
         let element = document.getElementById(elementId);
-        console.log(element);
         element.parentNode.removeChild(element)
     }
-</script>
-<script>
-
-    btn.addEventListener("click", search )
-
-    function search () 
+</script> 
+            <!-- api/search POST -->
+<script> 
+    btn_search.addEventListener("click", search_for_one )
+    function search_for_one () 
     {
-        console.log('our search has started');
-        const ourRequest =  new XMLHttpRequest();   
-        ourRequest.open('POST', 'http://localhost:5000/api/search');
-        ourRequest.responseType = 'json'; //JSON.parses responce
-        ourRequest.setRequestHeader('Content-Type', 'application/json');
+        const searchRequest =  new XMLHttpRequest();   
+        searchRequest.open('POST', apiSearch);
+        searchRequest.responseType = 'json'; //JSON.parses responce
+        searchRequest.setRequestHeader('Content-Type', 'application/json');
 
         const sentData = 
         {
-            "file_name": fileName.value,
-            "extention": extentionName.value
+            "file_name": fileNameSearch.value,
+            "extention": extentionNameSearch.value
         };
 
-        ourRequest.onload = function ()
+        searchRequest.onload = function()
         {
-            console.log('ourRequest.onload has started')
-            console.log(ourRequest.status);
-            if (ourRequest.status == 400)
+            if (searchRequest.status == 400)
             {
-                console.log('if ourRequest == 200 has started');
-                elementCheck_Status();
-                let htmlString = "<p>" + ourRequest.response[0].status + "</p>";
+                elementCheck_Status('error');
+                let htmlString = "<p>" + searchRequest.response[0].status + "</p>";
                 addElement('status_display','p', 'error', htmlString);
-                console.log('if ourRequest == 200 has eneded');
                 return;
             }
-            if (ourRequest.status == 200)
+            if (searchRequest.status == 200)
             {
-                elementCheck_Status();
+                elementCheck_Status('error');
                 let htmlString = "<p> File exist </p>";
                 addElement('status_display','p', 'error', htmlString);
                 return;
             }
-            elementCheck_Status();
+            elementCheck_Status('error');
             let htmlString = "<p> File doesn't exist </p>";
-            addElement('status_display','p', 'error', htmlString);
-            console.log(ourRequest);
-            console.log(ourRequest.statusText);            
-            console.log('ourRequest.onload has ended')            
+            addElement('status_display','p', 'error', htmlString);  
         }
-        ourRequest.send(JSON.stringify(sentData));
+        searchRequest.send(JSON.stringify(sentData));
     }
+    
 
+</script> 
+            <!-- api/search GET -->
+<script>
+    btn_get_all.addEventListener("click", search_For_All);
+    function search_For_All ()
+    {
+        const searchRequest =  new XMLHttpRequest();   
+        searchRequest.open('GET', apiSearch, true);
+
+        searchRequest.onload = function()
+        {
+            const list = JSON.parse(searchRequest.responseText);
+            if(list_Display_Status == 1) 
+            {
+                if (deleteStatus == 1)
+                {
+                    let lastElement = list.length;
+                    let element_Id_String_Last = "file_id_" + lastElement;
+                    removeElement(element_Id_String_Last);
+                }                
+                for (i = 0; i < list.length; i++)
+                {
+                    let element_Id_String = "file_id_" + i;
+                    removeElement(element_Id_String);
+                }
+            }
+            let htmlString = "";
+            for (i = 0; i < list.length; i++)
+            {
+                htmlString += '<p id="file_id_' + i +  '">' + list[i].FileName + "." + list[i].Extention + "</p>";
+            }
+            file_List_Insert.insertAdjacentHTML('beforeEnd', htmlString);
+            list_Display_Status = 1;
+        }
+        searchRequest.send();
+    }
 </script>
+            <!-- DELETE -->
+<script>
+    btn_delete.addEventListener("click", delete_File);
+    function delete_File ()
+    {
+        const deleteRequest = new XMLHttpRequest();
+        deleteRequest.open('DELETE', PatchOrDelete);
+        deleteRequest.responseType = 'json';
+        deleteRequest.setRequestHeader('Content-Type', 'application/json');
+        
+        const deleteData =  
+        {
+            "file_name": delete_file_name.value,
+            "extention": delete_file_extention.value
+        };
 
+        deleteRequest.onload = function ()
+        {
+            if (deleteRequest.status == 400)
+            {
+                elementCheck_Status('error');
+                let htmlString = "<p>" + deleteRequest.response[0].status + "</p>";
+                addElement('status_display','p', 'error', htmlString);
+                return;
+            }
+            if (deleteRequest.status == 200)
+            {
+                elementCheck_Status('error');
+                let htmlString = "<p> File has been deleted </p>";
+                addElement('status_display','p', 'error', htmlString);
+                deleteStatus = 1;
+                return;
+            }
+            elementCheck_Status('error');
+            let htmlString = "<p> File doesn't exist </p>";
+            addElement('status_display','p', 'error', htmlString);       
+        }
+        deleteRequest.send(JSON.stringify(deleteData))
+    }
+</script>
+            <!-- PATCH -->
+<script>
+    btn_patch_id.addEventListener("click", patchFunction)
 
-<a href="/" class="btn btn-light mt-4">Home</a>
-<a href="/" class="btn btn-light mt-4">Home</a>
-<a href="/" class="btn btn-light mt-4">Home</a>
-<a href="/" class="btn btn-light mt-4">Home</a>
+    function patchFunction ()
+    {
+        const patchRequest = new XMLHttpRequest();
+        patchRequest.open('PATCH', PatchOrDelete);
+        patchRequest.responseType = 'json';
+        patchRequest.setRequestHeader('Content-Type', 'application/json');
+
+        const patchData =
+        {
+            "file_name": filePatch.value,
+            "extention": extentionPatch.value,
+            "file_name_to": filePatchNew.value,
+            "extention_to": extentionPatchNew.value
+        } 
+        patchRequest.onload = function () 
+        {
+            if (patchRequest.status == 400)
+            {
+                elementCheck_Status('error');
+                let htmlString = "<p>" + patchRequest.response[0].status + "</p>";
+                addElement('status_display','p', 'error', htmlString);
+                return;
+            }
+            if (patchRequest.status == 403)
+            {
+                elementCheck_Status('error');
+                let htmlString = "<p> A file with that extention already exist. Cannot add a duplicate file </p>";
+                addElement('status_display','p', 'error', htmlString);
+                return;
+            }
+            if (patchRequest.status == 200)
+            {
+                elementCheck_Status('error');
+                let htmlString = "<p> File has been updated/renamed </p>";
+                addElement('status_display','p', 'error', htmlString);
+                return;
+            }
+            if (patchRequest.status == 404)
+            {
+                elementCheck_Status('error')
+                let htmlString = "<p> The file you want rename does not exist. </p>";
+                addElement('status_display','p', 'error', htmlString);
+            }
+            let html = "";
+            html += patchRequest.response[0].status
+        }
+        patchRequest.send(JSON.stringify(patchData));
+    }
+</script>
